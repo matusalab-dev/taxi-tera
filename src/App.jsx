@@ -1,14 +1,21 @@
-// var map = L.map("map").setView([51.505, -0.09], 13);
-
-// L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-//   attribution:
-//     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-// }).addTo(map);
-
-// L.marker([51.5, -0.09])
-//   .addTo(map)
-//   .bindPopup("A pretty CSS popup.<br> Easily customizable.")
-//   .openPopup();
+import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 export default function App() {
-  return <div id="map"></div>;
+  return (
+    <MapContainer
+      center={[51.505, -0.09]}
+      zoom={13}
+      style={{ height: "100vh" }}
+    >
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      <Marker position={[51.505, -0.09]}>
+        <Popup>
+          current location <br /> Easily customizable.
+        </Popup>
+      </Marker>
+    </MapContainer>
+  );
 }

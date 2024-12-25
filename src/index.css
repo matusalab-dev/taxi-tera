@@ -9,16 +9,14 @@
 
   color-scheme: light dark;
   /* color: rgba(255, 255, 255, 0.87);*/
-  background-color: #1e293b;
+  /* background-color: #1e293b; */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-#map {
-  height: 180px;
-}
+
 a {
   font-weight: 500;
   color: #646cff;

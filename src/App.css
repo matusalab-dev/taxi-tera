@@ -1,3 +1,8 @@
+.leaflet-container {
+  background: #ddd;
+  outline-offset: 1px;
+  height: 100vh;
+}
 /* #root {
   max-width: 1280px;
   margin: auto;
