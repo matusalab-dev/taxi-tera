@@ -38,3 +38,28 @@ export const deleteTaxiStand = async (req,res) => {
     await TaxiStand.findByIdAndDelete(id);
     res.json({ message: "Taxi stand deleted successfully." });
 }
+
+export const getNearbyTaxiStands = async (req, res) => {
+  const { lat, lng } = req.query;
+
+  if (!lat || !lng ) {
+    return res.status(400).json({ error: "Latitude and longitude are required." });
+  }
+
+  try {
+
+    const nearbyStands = await TaxiStand.find({
+      location: {
+        $near: {
+          $geometry: { type: "Point", coordinates: [parseFloat(lng), parseFloat(lat)] },
+          $maxDistance: 2000,
+        },
+      },
+    });
+
+    res.status(200).json(nearbyStands);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error. Please try again later." });
+  }
+};
