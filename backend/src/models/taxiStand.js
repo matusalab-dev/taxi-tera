@@ -28,7 +28,24 @@ const taxiStandSchema = new mongoose.Schema({
   },
   address: {
     type: String,
-  }
+  },
+  operationalHours: {
+    type: Map,
+    of: String,
+    default: {},
+  },
+  rating: {
+    average: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 5,
+    },
+    count: {
+      type: Number,
+      default: 0,
+    },
+  },
 }, {
   timestamps: true,
 });
