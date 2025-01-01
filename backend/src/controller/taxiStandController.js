@@ -63,3 +63,53 @@ export const getNearbyTaxiStands = async (req, res) => {
     res.status(500).json({ error: "Server error. Please try again later." });
   }
 };
+
+export const searchTaxiStand = async (req, res) => {
+  const { name, address } = req.query;
+
+  try {
+    const filter = {};
+    if (name) {
+      filter.name = { $regex: name, $options: "i" };
+    }
+    if (address) {
+      filter.address = { $regex: address, $options: "i" };
+    }
+
+    const results = await TaxiStand.find(filter);
+    res.status(200).json({ results });
+  } catch (error) {
+    res.status(500).json({ message: "Error during search", error });
+  }
+};
+
+export const rateTaxiStand = async (req, res) => {
+  const { id } = req.params;
+  const { rating } = req.body;
+
+  if (!rating || rating < 0 || rating > 5) {
+    return res.status(400).json({ error: "Rating must be a number between 0 and 5." });
+  }
+
+  try {
+    const taxiStand = await TaxiStand.findById(id);
+    if (!taxiStand) {
+      return res.status(404).json({ error: "Taxi stand not found." });
+    }
+
+    
+    const totalRating = taxiStand.rating.average * taxiStand.rating.count + rating;
+    taxiStand.rating.count += 1;
+    taxiStand.rating.average = totalRating / taxiStand.rating.count;
+
+    const updatedTaxiStand = await taxiStand.save();
+
+    res.status(200).json({
+      message: "Rating added successfully.",
+      data: updatedTaxiStand,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error." });
+  }
+};
