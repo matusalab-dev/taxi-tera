@@ -10,7 +10,6 @@ router.patch('/taxiStand/:id', updateTaxiStand);
 router.delete('/taxiStand/:id', deleteTaxiStand);
 router.get('/nearby', getNearbyTaxiStands);
 
-// New route for file upload
 router.post('/upload', upload.single('file'), uploadFile);
 
 export default router;

@@ -4,11 +4,9 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 
-// Configure multer storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadPath = path.resolve('src/uploads');
-    // Ensure directory exists
     fs.mkdirSync(uploadPath, { recursive: true });
     cb(null, uploadPath);
   },
@@ -17,7 +15,6 @@ const storage = multer.diskStorage({
   },
 });
 
-// Create the upload middleware
 const upload = multer({ storage });
 
 export const uploadFile = async (req, res) => {
@@ -25,14 +22,11 @@ export const uploadFile = async (req, res) => {
     return res.status(400).json({ message: "No file uploaded" });
   }
 
-  // Use path.resolve to ensure the correct file path
   const filePath = path.resolve('src/uploads', req.file.filename);
 
   try {
-    // Convert CSV to JSON
     const jsonArray = await csv().fromFile(filePath);
 
-    // Transform data to match the model's schema
     const transformedData = jsonArray.map(item => ({
       name: item.name,
       description: item.description,
