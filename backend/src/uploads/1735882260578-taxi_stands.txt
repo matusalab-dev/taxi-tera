@@ -1,0 +1,2 @@
+name,description,location.address,location.coordinates.0,location.coordinates.1,operationalHours.Monday,operationalHours.Tuesday,rating.average,rating.count
+Central Taxi Stand,Main taxi stand in the city center.,123 City Center,38.763611,9.005401,24 hours,24 hours,4.5,10
