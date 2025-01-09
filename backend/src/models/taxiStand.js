@@ -1,5 +1,4 @@
-import mongoose from "mongoose";
-
+import mongoose from 'mongoose';
 
 const taxiStandSchema = new mongoose.Schema({
   name: {
@@ -49,6 +48,7 @@ const taxiStandSchema = new mongoose.Schema({
 }, {
   timestamps: true,
 });
+
 taxiStandSchema.index({ location: "2dsphere" });
 
 export const TaxiStand = mongoose.model("TaxiStand", taxiStandSchema);
