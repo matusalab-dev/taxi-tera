@@ -11,14 +11,49 @@ export const addTaxiStand = async (req, res) => {
     }
     }
 
-export const getTaxiStands = async (req, res) => {
-    try {
-        const taxiStands = await TaxiStand.find();
-        res.status(200).json(taxiStands);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
-    }
+    export const getTaxiStands = async (req, res) => {
+      try {
+        const { name, rating, near, radius = 5000, page = 1, limit = 10 } = req.query;
+    
+        let query = {};
+   
+        if (name) {
+          query.name = { $regex: name, $options: "i" };
+        }
+
+        if (rating) {
+          query["rating.average"] = { $gte: parseFloat(rating) };
+        }
+
+        if (near) {
+          const [longitude, latitude] = near.split(",").map(Number);
+          query.location = {
+            $geoWithin: {
+              $centerSphere: [[longitude, latitude], radius / 6378.1] // radius in radians
+            }
+          };
+        }
+
+        const skip = (page - 1) * limit;
+    
+        const taxiStands = await TaxiStand.find(query)
+          .skip(skip)
+          .limit(parseInt(limit));
+          
+        const total = await TaxiStand.countDocuments(query);
+    
+        res.status(200).json({
+          data: taxiStands,
+          total,
+          page: parseInt(page),
+          pages: Math.ceil(total / limit),
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to fetch taxi stands." });
+      }
+    };
+    
 
 export const updateTaxiStand = async (req, res) => {
     const { id } = req.params;

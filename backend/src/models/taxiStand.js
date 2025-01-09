@@ -1,5 +1,50 @@
 import mongoose from "mongoose";
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     TaxiStand:
+ *       type: object
+ *       required:
+ *         - name
+ *         - location
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: Name of the taxi stand
+ *         description:
+ *           type: string
+ *           description: Description of the taxi stand
+ *         location:
+ *           type: object
+ *           properties:
+ *             type:
+ *               type: string
+ *               enum: ["Point"]
+ *             coordinates:
+ *               type: array
+ *               items:
+ *                 type: number
+ *               description: Coordinates [longitude, latitude]
+ *         address:
+ *           type: string
+ *           description: Address of the taxi stand
+ *         operationalHours:
+ *           type: object
+ *           additionalProperties:
+ *             type: string
+ *           description: Operational hours of the taxi stand
+ *         rating:
+ *           type: object
+ *           properties:
+ *             average:
+ *               type: number
+ *               description: Average rating
+ *             count:
+ *               type: number
+ *               description: Number of ratings
+ */
 
 const taxiStandSchema = new mongoose.Schema({
   name: {
