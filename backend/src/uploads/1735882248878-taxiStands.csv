@@ -1,0 +1,3 @@
+name,description,location.type,location.coordinates,address,operationalHours,rating.average,rating.count
+Central Stand,Main taxi stand,"Point","[38.75877,9.0306]",123 Main St,"{\"Monday\":\"8am-8pm\",\"Tuesday\":\"8am-8pm\"}",4.5,10
+West End Stand,Secondary taxi stand,"Point","[38.72752,9.03648]",456 West St,"{\"Monday\":\"9am-9pm\",\"Wednesday\":\"9am-9pm\"}",4.0,20

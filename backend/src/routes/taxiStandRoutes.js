@@ -1,5 +1,9 @@
 import express from 'express';
+
 import { addTaxiStand, deleteTaxiStand, getNearbyTaxiStands, getTaxiStands, rateTaxiStand, searchTaxiStand, updateTaxiStand } from '../controller/taxiStandController.js';
+
+import { uploadFile, upload } from '../controller/fileUploadController.js';
+
 
 const router = express.Router();
 
@@ -112,6 +116,7 @@ router.patch('/taxiStand/:id', updateTaxiStand);
  */
 router.delete('/taxiStand/:id', deleteTaxiStand);
 
+
 /**
  * @swagger
  * /nearby:
@@ -197,5 +202,6 @@ router.get('/search', searchTaxiStand);
  *         description: Internal server error
  */
 router.post('/rate/:id', rateTaxiStand);
+router.post('/upload', upload.single('file'), uploadFile);
 
 export default router;
