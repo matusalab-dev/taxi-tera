@@ -5,7 +5,7 @@ const taxiStandSchema = Joi.object({
   location: Joi.object({
     type: Joi.string().valid("Point").required(),
     coordinates: Joi.array().items(Joi.number()).length(2).required(),
-  }).required(),
+  }).required().optional(),
   address: Joi.string().optional(),
 });
 

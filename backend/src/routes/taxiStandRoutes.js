@@ -1,8 +1,7 @@
 import express from 'express';
-
 import { addTaxiStand, deleteTaxiStand, getNearbyTaxiStands, getTaxiStandById, getTaxiStands, rateTaxiStand, searchTaxiStand, updateTaxiStand } from '../controller/taxiStandController.js';
-
 import { uploadFile, upload } from '../controller/fileUploadController.js';
+import { authorizeRoles, verifyToken } from '../middleware/verify.js';
 
 
 const router = express.Router();
@@ -10,7 +9,7 @@ const router = express.Router();
 /**
  * @swagger
  * tags:
- *   name: taxiStands
+ *   name: Taxi Stands
  *   description: API to manage taxi stands
  */
 
@@ -19,6 +18,7 @@ const router = express.Router();
  * /taxiStands:
  *   get:
  *     summary: Get all taxi stands
+ *     tags: [Taxi Stands]
  *     parameters:
  *       - in: query
  *         name: name
@@ -63,6 +63,7 @@ router.get('/taxiStands', getTaxiStands);
  * /taxiStand:
  *   post:
  *     summary: Add a new taxi stand
+ *     tags: [Taxi Stands]
  *     requestBody:
  *       required: true
  *       content:
@@ -75,13 +76,14 @@ router.get('/taxiStands', getTaxiStands);
  *       400:
  *         description: Invalid input
  */
-router.post('/taxiStand', addTaxiStand);
+router.post('/taxiStand',verifyToken,authorizeRoles("admin"), addTaxiStand);
 
 /**
  * @swagger
  * /taxiStand/{id}:
  *   patch:
  *     summary: Update a taxi stand
+ *     tags: [Taxi Stands]
  *     parameters:
  *       - in: path
  *         name: id
@@ -101,13 +103,14 @@ router.post('/taxiStand', addTaxiStand);
  *       404:
  *         description: Taxi stand not found
  */
-router.patch('/taxiStand/:id', updateTaxiStand);
+router.patch('/taxiStand/:id', verifyToken,authorizeRoles("admin"), updateTaxiStand);
 
 /**
  * @swagger
  * /taxiStand/{id}:
  *   delete:
  *     summary: Delete a taxi stand
+ *     tags: [Taxi Stands]
  *     parameters:
  *       - in: path
  *         name: id
@@ -121,7 +124,7 @@ router.patch('/taxiStand/:id', updateTaxiStand);
  *       404:
  *         description: Taxi stand not found
  */
-router.delete('/taxiStand/:id', deleteTaxiStand);
+router.delete('/taxiStand/:id',verifyToken, authorizeRoles("admin"), deleteTaxiStand);
 
 
 /**
@@ -129,6 +132,7 @@ router.delete('/taxiStand/:id', deleteTaxiStand);
  * /nearby:
  *   get:
  *     summary: Get nearby taxi stands
+ *     tags: [Taxi Stands]
  *     parameters:
  *       - in: query
  *         name: lat
@@ -157,6 +161,7 @@ router.get('/nearby', getNearbyTaxiStands);
  * /search:
  *   get:
  *     summary: Search taxi stands
+ *     tags: [Taxi Stands]
  *     parameters:
  *       - in: query
  *         name: name
@@ -181,6 +186,7 @@ router.get('/search', searchTaxiStand);
  * /rate/{id}:
  *   post:
  *     summary: Rate a taxi stand
+ *     tags: [Taxi Stands]
  *     parameters:
  *       - in: path
  *         name: id
@@ -208,15 +214,14 @@ router.get('/search', searchTaxiStand);
  *       500:
  *         description: Internal server error
  */
-router.post('/rate/:id', rateTaxiStand);
+router.post('/rate/:id',verifyToken, rateTaxiStand);
 
 /**
  * @swagger
  * /taxiStand/{id}:
  *   get:
  *     summary: Retrieve a taxi stand by its ID
- *     tags:
- *       - Taxi Stands
+ *     tags: [Taxi Stands]
  *     parameters:
  *       - in: path
  *         name: id
@@ -251,8 +256,7 @@ router.get('/taxiStand/:id', getTaxiStandById );
  * /upload:
  *   post:
  *     summary: Upload a CSV file to bulk add taxi stands
- *     tags:
- *       - File Upload
+ *     tags: [Taxi Stands]
  *     requestBody:
  *       required: true
  *       content:
@@ -286,6 +290,6 @@ router.get('/taxiStand/:id', getTaxiStandById );
  *       500:
  *         description: Internal server error
  */
-router.post('/upload', upload.single('file'), uploadFile);
+router.post('/upload',verifyToken, authorizeRoles("admin"), upload.single('file'), uploadFile);
 
 export default router;

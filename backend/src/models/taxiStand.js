@@ -51,6 +51,7 @@ const taxiStandSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
   description: {
     type: String,
@@ -63,13 +64,22 @@ const taxiStandSchema = new mongoose.Schema({
     },
     coordinates: {
       type: [Number],
-      required: true,
-      validate: {
-        validator: function (coords) {
-          return coords.length === 2;
+      required: true, 
+      validate: [
+        {
+          validator: function (coords) {
+            return coords.length === 2;
+          },
+          message: "Coordinates must have exactly two values: [longitude, latitude]",
         },
-        message: "Coordinates must have exactly two values: [longitude, latitude]",
-      },
+        {
+          validator: function (coords) {
+            const [longitude, latitude] = coords;
+            return longitude >= -180 && longitude <= 180 && latitude >= -90 && latitude <= 90;
+          },
+          message: "Coordinates must be valid longitude and latitude values",
+        },
+      ],
     },
   },
   address: {
