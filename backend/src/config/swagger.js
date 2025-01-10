@@ -11,7 +11,7 @@ const options = {
     },
     servers: [
       {
-        url: 'https://taxi-tera.onrender.com',
+        url: 'https://taxi-tera.onrender.com/api',
       },
     ],
   },

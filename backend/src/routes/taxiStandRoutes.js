@@ -1,11 +1,18 @@
 import express from 'express';
 
-import { addTaxiStand, deleteTaxiStand, getNearbyTaxiStands, getTaxiStands, rateTaxiStand, searchTaxiStand, updateTaxiStand } from '../controller/taxiStandController.js';
+import { addTaxiStand, deleteTaxiStand, getNearbyTaxiStands, getTaxiStandById, getTaxiStands, rateTaxiStand, searchTaxiStand, updateTaxiStand } from '../controller/taxiStandController.js';
 
 import { uploadFile, upload } from '../controller/fileUploadController.js';
 
 
 const router = express.Router();
+
+/**
+ * @swagger
+ * tags:
+ *   name: taxiStands
+ *   description: API to manage taxi stands
+ */
 
 /**
  * @swagger
@@ -202,6 +209,83 @@ router.get('/search', searchTaxiStand);
  *         description: Internal server error
  */
 router.post('/rate/:id', rateTaxiStand);
+
+/**
+ * @swagger
+ * /taxiStand/{id}:
+ *   get:
+ *     summary: Retrieve a taxi stand by its ID
+ *     tags:
+ *       - Taxi Stands
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The unique ID of the taxi stand
+ *     responses:
+ *       200:
+ *         description: The details of the taxi stand
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/TaxiStand'
+ *       404:
+ *         description: Taxi stand not found or invalid ID
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Taxi stand not found.
+ *       500:
+ *         description: Internal server error
+ */
+router.get('/taxiStand/:id', getTaxiStandById );
+
+/**
+ * @swagger
+ * /upload:
+ *   post:
+ *     summary: Upload a CSV file to bulk add taxi stands
+ *     tags:
+ *       - File Upload
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *                 description: The CSV file containing taxi stand data
+ *     responses:
+ *       201:
+ *         description: Taxi stands successfully created from the file
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/TaxiStand'
+ *       400:
+ *         description: No file uploaded
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: No file uploaded
+ *       500:
+ *         description: Internal server error
+ */
 router.post('/upload', upload.single('file'), uploadFile);
 
 export default router;

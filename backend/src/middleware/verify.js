@@ -11,7 +11,7 @@ export const verifyToken = async(req, res, next) => {
   try {
       const verified = jwt.verify(token, process.env.SECRET);
       const userId = verified.id;
-      const user = await User.findById(userId).select('favorites role'); 
+      const user = await User.findById(userId).select('role'); 
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }

@@ -1,88 +1,73 @@
-import express from "express";
-import { body, validationResult } from "express-validator";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
-import User from "../models/user.js";
-import dotenv from "dotenv";
-import { login, signup } from "../controller/authController.js";
-dotenv.config();
+import express from 'express';
+import { login, signup } from '../controller/authController.js';
 
 const router = express.Router();
 
 /**
  * @swagger
- * components:
- *   schemas:
- *     User:
- *       type: object
- *       required:
- *         - name
- *         - username
- *         - email
- *         - password
- *       properties:
- *         id:
- *           type: string
- *           description: The auto-generated id of the user
- *         name:
- *           type: string
- *           description: The name of the user
- *         username:
- *           type: string
- *           description: The username of the user
- *         email:
- *           type: string
- *           description: The email of the user
- *         password:
- *           type: string
- *           description: The password of the user
- *         role:
- *           type: string
- *           description: The role of the user
- *       example:
- *         name: John Doe
- *         username: user123
- *         email: user@example.com
- *         password: password123
- *         role: user
+ * tags:
+ *   name: Auth
+ *   description: Authentication and Authorization
  */
 
 /**
  * @swagger
- * tags:
- *   name: User
- *   description: API for user authentication and management
- */
-/**
- * @swagger
- * /signup:
+ * /auth/signup:
  *   post:
- *     summary: Sign up a new user
- *     tags: [User]
+ *     summary: Register a new user
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/User'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: John Doe
+ *               username:
+ *                 type: string
+ *                 example: johndoe
+ *               email:
+ *                 type: string
+ *                 example: johndoe@example.com
+ *               password:
+ *                 type: string
+ *                 example: password123
+ *               role:
+ *                 type: string
+ *                 enum: [admin, user]
+ *                 example: user
  *     responses:
  *       201:
- *         description: User was successfully registered
+ *         description: User registered successfully
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               type: object
+ *               properties:
+ *                 name:
+ *                   type: string
+ *                 username:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *                 role:
+ *                   type: string
  *       400:
- *         description: Validation error
+ *         description: Validation errors
  *       500:
- *         description: Server error
+ *         description: Internal server error
  */
+router.post('/signup', signup);
+
 /**
  * @swagger
- * /login:
+ * /auth/login:
  *   post:
- *     summary: Log in an existing user
- *     tags: [User]
+ *     summary: Login a user
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
@@ -92,16 +77,13 @@ const router = express.Router();
  *             properties:
  *               username:
  *                 type: string
- *                 description: The username of the user
+ *                 example: johndoe
  *               password:
  *                 type: string
- *                 description: The user's password
- *             example:
- *               username: johndoe
- *               password: password123
+ *                 example: password123
  *     responses:
  *       200:
- *         description: User successfully logged in
+ *         description: Successfully logged in
  *         content:
  *           application/json:
  *             schema:
@@ -109,33 +91,25 @@ const router = express.Router();
  *               properties:
  *                 token:
  *                   type: string
- *                   description: The JWT token for authentication
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                     username:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     role:
+ *                       type: string
  *       400:
- *         description: Validation error
+ *         description: Validation errors or invalid credentials
  *       404:
  *         description: User not found
  *       500:
- *         description: Server error
+ *         description: Internal server error
  */
-router.post(
-  "/signup",
-  [
-    body("name", "Name is required").notEmpty(),
-    body("username", "Username is required").isLength({ min: 6 }).notEmpty(),
-    body("email", "Email is required").isEmail().notEmpty(),
-    body("password", "Password is required").isLength({ min: 6 }).notEmpty(),
-    body("role").optional().isIn(["admin", "user"]).withMessage("Invalid role"),
-  ],
-  signup
-);
-
-router.post(
-  "/login",
-  [
-    body("username", "Username is required").notEmpty(),
-    body("password", "Password is required").notEmpty(),
-  ],
-  login
-);
+router.post('/login', login);
 
 export default router;
