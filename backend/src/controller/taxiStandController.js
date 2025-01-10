@@ -31,7 +31,7 @@ export const getTaxiStands = async (req, res, next) => {
       const [longitude, latitude] = near.split(",").map(Number);
       query.location = {
         $geoWithin: {
-          $centerSphere: [[longitude, latitude], radius / 6378.1], // radius in radians
+          $centerSphere: [[longitude, latitude], radius / 6378.1],
         },
       };
     }
