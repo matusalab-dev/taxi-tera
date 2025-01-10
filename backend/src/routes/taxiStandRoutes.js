@@ -84,6 +84,8 @@ router.post('/taxiStand',verifyToken,authorizeRoles("admin"), addTaxiStand);
  *   patch:
  *     summary: Update a taxi stand
  *     tags: [Taxi Stands]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -111,6 +113,8 @@ router.patch('/taxiStand/:id', verifyToken,authorizeRoles("admin"), updateTaxiSt
  *   delete:
  *     summary: Delete a taxi stand
  *     tags: [Taxi Stands]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -187,6 +191,8 @@ router.get('/search', searchTaxiStand);
  *   post:
  *     summary: Rate a taxi stand
  *     tags: [Taxi Stands]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -257,6 +263,8 @@ router.get('/taxiStand/:id', getTaxiStandById );
  *   post:
  *     summary: Upload a CSV file to bulk add taxi stands
  *     tags: [Taxi Stands]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
