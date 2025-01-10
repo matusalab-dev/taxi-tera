@@ -8,60 +8,67 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "../App.css";
-import { useEffect, useState } from "react";
-
+import useGeolocation from "../hooks/useGeolocation";
+import { useRef, useState, useEffect } from "react";
+import { LocateIcon } from "lucide-react";
 const Map = () => {
-  const [position, setPosition] = useState([9.0204692, 38.8024029]);
+  const location = useGeolocation();
+  const [center, setCenter] = useState([9.0204692, 38.8024029]); // default location set to Megenagna
+  const mapRef = useRef();
 
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const { latitude, longitude } = pos.coords;
-          //   console.log(latitude, longitude);
+  const { coordinates } = location;
+  console.log("coordinates:", location);
 
-          setPosition([latitude, longitude]);
-        },
-        (err) => {
-          console.error(err);
-        }
+  const ZOOM_LEVEL = 13;
+
+  const showMyLocation = () => {
+    if (location.loaded && !location.error) {
+      mapRef.current.flyTo(
+        [location.coordinates.lat, location.coordinates.lng],
+        ZOOM_LEVEL,
+        { animate: true }
       );
+    } else {
+      alert(location.error.message);
     }
-  }, []);
-
-  const LocationMarker = () => {
-    const map = useMap();
-
-    useEffect(() => {
-      if (position) {
-        map.setView(position, map.getZoom());
-      }
-    }, [position, map]);
-
-    return (
-      <Marker position={position}>
-        <Popup>
-          You are here <br /> Easily customizable.
-        </Popup>
-      </Marker>
-    );
   };
+
   return (
-    <MapContainer
-      center={position}
-      zoom={13}
-      style={{
-        height: "100vh",
-        width: "100%",
-        overflow: "visible",
-      }}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <LocationMarker />
-    </MapContainer>
+    <div className="relative w-full h-screen">
+      <MapContainer
+        center={center}
+        zoom={ZOOM_LEVEL}
+        ref={mapRef}
+        className="absolute z-10 w-full h-full overflow-visible"
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+
+        {location.loaded && (
+          <Marker position={[coordinates.lat, coordinates.lng]}>
+            <Popup>
+              Your location: <br /> lat: {coordinates.lat}, lon:{" "}
+              {coordinates.lng}
+            </Popup>
+          </Marker>
+        )}
+
+        {/* <LocationMarker /> */}
+      </MapContainer>
+      <button
+        onClick={showMyLocation}
+        className="absolute z-[1000] px-3 py-1  top-24 left-0"
+      >
+        <LocateIcon
+          width="30px"
+          height="30px"
+          color="black"
+          style={{ backgroundColor: "white", lineHeight: "30px" }}
+        />
+      </button>
+    </div>
   );
 };
 
