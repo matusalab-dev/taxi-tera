@@ -1,21 +1,15 @@
-import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+import "./App.css";
+import Map from "./components/Map";
 export default function App() {
   return (
-    <MapContainer
-      center={[51.505, -0.09]}
-      zoom={13}
-      style={{ height: "100vh" }}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <Marker position={[51.505, -0.09]}>
-        <Popup>
-          current location <br /> Easily customizable.
-        </Popup>
-      </Marker>
-    </MapContainer>
+    <main className="">
+      <Map />
+      <section
+        id="sidebar"
+        className=" w-1/3 h-full p-5 bg-black text-white overflow-y-hidden z-[999] fixed top-0 right-0"
+      >
+        <h3>side bar</h3>
+      </section>
+    </main>
   );
 }

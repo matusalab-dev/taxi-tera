@@ -1,8 +1,35 @@
+.ActiveBar,
+.sidebar {
+  background-color: #000000;
+  width: 30%;
+  height: 100%;
+  padding: 10px;
+  overflow-y: hidden;
+  will-change: transform;
+  color: white;
+  z-index: 999;
+  position: fixed;
+  /* margin-left: 10px; */
+  /* top: 1%; */
+  top: 0;
+  right: 0;
+}
 .leaflet-container {
   background: #ddd;
   outline-offset: 1px;
-  height: 100vh;
+  height: 100vh !important;
+  width: 100% !important;
+  z-index: 50;
+  overflow: visible !important;
 }
+/* #sidebar {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100vh;
+  width: 300px;
+  min-width: 200px;
+} */
 /* #root {
   max-width: 1280px;
   margin: auto;
