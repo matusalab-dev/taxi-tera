@@ -8,7 +8,9 @@ import AuthProvider from "./contexts/AuthContext.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
-      <App />
+      <SavedRoutesProvider>
+        <App />
+      </SavedRoutesProvider>
     </AuthProvider>
   </StrictMode>
 );

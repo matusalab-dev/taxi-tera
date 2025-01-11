@@ -3,16 +3,19 @@ import { createContext, useContext, useReducer } from "react";
 const SavedRoutesContext = createContext(null);
 const SavedRoutesDispatchContext = createContext(null);
 
-const initialAuthState = {
-  userInfo: localStorage.getItem("userInfo")
-    ? JSON.parse(localStorage.getItem("userInfo"))
+const initialSavedRouteState = {
+  savedRoutes: localStorage.getItem("savedRoutes")
+    ? JSON.parse(localStorage.getItem("savedRoutes"))
     : null,
 };
-export default function AuthProvider({ children }) {
-  const [auth, dispatch] = useReducer(savedRoutesReducers, initialAuthState);
+export default function SavedRoutesProvider({ children }) {
+  const [savedRoute, dispatch] = useReducer(
+    savedRoutesReducers,
+    initialSavedRouteState
+  );
 
   return (
-    <SavedRoutesContext.Provider value={auth}>
+    <SavedRoutesContext.Provider value={savedRoute}>
       <SavedRoutesDispatchContext.Provider value={dispatch}>
         {children}
       </SavedRoutesDispatchContext.Provider>
@@ -28,25 +31,22 @@ export function useSavedRoutesDispatch() {
   return useContext(SavedRoutesDispatchContext);
 }
 
-function savedRoutesReducers(authState, action) {
+function savedRoutesReducers(savedRoutes, action) {
   switch (action.type) {
-    case "setCredentials":
-      localStorage.setItem("userInfo", JSON.stringify(action.payload));
-
-      const expirationTime = new Date().getTime() + 30 * 24 * 60 * 60 * 1000; // 30 days
-      localStorage.setItem("expirationTime", expirationTime);
+    case "saveRoute":
+      localStorage.setItem("savedRoutes", JSON.stringify(action.payload));
 
       return {
-        ...authState,
-        userInfo: action.payload,
+        ...savedRoutes,
+        savedRoutes: action.payload,
       };
-    case "logout":
-      localStorage.removeItem("userInfo");
+    case "removeRoute":
+      localStorage.removeItem("savedRoutes");
       return {
-        ...authState,
-        userInfo: null,
+        ...savedRoutes,
+        savedRoutes: null,
       };
     default:
-      return authState;
+      return savedRoutes;
   }
 }
