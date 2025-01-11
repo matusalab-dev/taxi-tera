@@ -28,6 +28,7 @@ export const login =async (req, res) => {
       return res.status(400).json({ errors: errors.array() });
     }
     const { username, password } = req.body;
+    console.log(username)
     try {
       const user = await User.findOne({ username });
       if (!user) {

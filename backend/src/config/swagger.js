@@ -9,9 +9,19 @@ const options = {
       version: '1.0.0',
       description: 'API documentation for Taxi-Tera',
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+    security: [{ bearerAuth: [] }],
     servers: [
       {
-        url: 'https://taxi-tera.onrender.com',
+        url: 'https://taxi-tera.onrender.com/api',
       },
     ],
   },
