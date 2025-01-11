@@ -1,4 +1,4 @@
-import { SavedRoute } from "../models/savedRoute.js";
+import { SavedRoute } from "../models/savedRoutes.js";
 import { TaxiStand } from "../models/taxiStand.js";
 
 export const saveRoute = async (req, res) => {
