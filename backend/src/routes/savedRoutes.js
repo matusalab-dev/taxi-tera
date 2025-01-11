@@ -43,6 +43,8 @@ const router = express.Router();
  *   post:
  *     summary: Save a new route for a user
  *     tags: [SavedRoutes]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -68,6 +70,8 @@ const router = express.Router();
  *   get:
  *     summary: Retrieve all saved routes for the current user
  *     tags: [SavedRoutes]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: A list of saved routes
@@ -87,6 +91,8 @@ const router = express.Router();
  *   delete:
  *     summary: Delete a saved route by ID
  *     tags: [SavedRoutes]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
