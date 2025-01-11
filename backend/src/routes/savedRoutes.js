@@ -31,15 +31,10 @@ const router = express.Router();
  *           items:
  *             type: string
  *           description: Array of taxi stand IDs included in the route
- *         createdAt:
- *           type: string
- *           format: date-time
- *           description: Timestamp when the route was created
  *       example:
  *         user: "60c72b2f4f1a2c001c9e99b1"
  *         name: "Daily Commute"
  *         taxiStands: ["60d5f9e0e6b1a7b35a27a1c5", "60d5f9e0e6b1a7b35a27a1c6"]
- *         createdAt: "2025-01-01T12:00:00Z"
  */
 
 /**
@@ -111,6 +106,6 @@ const router = express.Router();
  router.post('/savedRoutes', verifyToken, saveRoute);
  router.get('/savedRoutes', verifyToken, getSavedRoutes);
  
- router.delete('/savedRoutes/:id', deleteSavedRoute);
+ router.delete('/savedRoutes/:id',verifyToken, deleteSavedRoute);
 
  export default router;
