@@ -23,8 +23,8 @@ const Login = () => {
             size="lg"
             className="!mt-4"
           />
-          <div className="flex items-center gap-2 pb-3 font-normal">
-            <p>new user?</p>
+          <div className="flex items-center gap-2 !mt-5 font-normal">
+            <p className="font-light">new user?</p>
             <Button
               as="Link"
               to="/register"

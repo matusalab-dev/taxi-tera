@@ -18,7 +18,7 @@ const SearchStands = () => {
           size="outline"
           className="py-0 text-teal-500 bg-white min-w-max"
         />
-        <p className="text-sm font-normal">
+        <p className="text-sm font-light">
           and your search history and preferred routes will appear here.
         </p>
       </div>
