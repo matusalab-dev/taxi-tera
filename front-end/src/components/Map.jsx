@@ -11,6 +11,7 @@ import "../App.css";
 import useGeolocation from "../hooks/useGeolocation";
 import { useRef, useState, useEffect } from "react";
 import { LocateIcon } from "lucide-react";
+import { useMemo } from "react";
 const Map = () => {
   const location = useGeolocation();
   const [center, setCenter] = useState([9.0204692, 38.8024029]); // default location set to Megenagna
@@ -19,6 +20,48 @@ const Map = () => {
   const { coordinates } = location;
   const ZOOM_LEVEL = 13;
 
+  useEffect(() => {
+    fetch("/api/taxistands", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    }).then((response) => console.log(response.json()));
+    // Get raw response text
+    // .then((text) => {
+    //   console.log("Raw response text:", text); // Log raw response text
+    //   return JSON.parse(text); // Attempt to parse JSON
+    // })
+    // .then((data) => {
+    //   console.log("Fetched data:", data);
+    //   setTaxiStands(data);
+    // })
+    // .catch((error) => {
+    //   console.error("Error fetching data:", error);
+    // });
+  }, []);
+
+  const memoizedMapContainer = useMemo(() => (
+    <MapContainer
+      center={[coordinates.lat, coordinates.lng]}
+      zoom={ZOOM_LEVEL}
+      ref={mapRef}
+      className="absolute z-10 w-full h-full overflow-visible"
+    >
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      {location.loaded && (
+        <Marker position={[coordinates.lat, coordinates.lng]}>
+          <Popup>
+            Your location: <br /> lat: {coordinates.lat}, lon: {coordinates.lng}
+          </Popup>
+        </Marker>
+      )}
+    </MapContainer>
+  ));
   const showMyLocation = () => {
     if (location.loaded && !location.error) {
       mapRef.current.flyTo([coordinates.lat, coordinates.lng], ZOOM_LEVEL, {
@@ -42,32 +85,15 @@ const Map = () => {
     ]);
   }, []);
   console.log("coordinates", coordinates);
-  // if (condition) {
 
-  // } else {}
   return (
-    <div className="relative flex items-center justify-center w-full h-screen">
+    <div
+      // className="relative flex items-center justify-center w-full h-screen"
+      className="relative flex items-center justify-center w-full h-screen"
+    >
       {location.loaded && !location.error ? (
         <>
-          <MapContainer
-            center={[coordinates.lat, coordinates.lng]}
-            zoom={ZOOM_LEVEL}
-            ref={mapRef}
-            className="absolute z-10 w-full h-full overflow-visible"
-          >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            {location.loaded && (
-              <Marker position={[coordinates.lat, coordinates.lng]}>
-                <Popup>
-                  Your location: <br /> lat: {coordinates.lat}, lon:{" "}
-                  {coordinates.lng}
-                </Popup>
-              </Marker>
-            )}
-          </MapContainer>
+          {memoizedMapContainer}
           <button
             onClick={showMyLocation}
             className="absolute z-[1000] px-3 py-1  top-24 left-0"
@@ -90,14 +116,15 @@ const Map = () => {
       ) : location.error ? (
         <div className="flex flex-col text-center max-w-80">
           <h1 className="flex items-center justify-center text-2xl  top-1/4 left-[30vw] sm:right-1/2">
-            we need your permission to access your location!
+            Either you denied a permission to access your location or network
+            error occurred.
           </h1>
           <p className="text-base">
             refresh the page to display the location permission pop up again.
           </p>
         </div>
       ) : (
-        <h1 className="absolute flex items-center justify-center text-4xl text-center top-1/4 left-[30vw] sm:right-1/2">
+        <h1 className="animate-pulse absolute flex items-center justify-center text-4xl text-center top-1/4 left-[30vw] sm:right-1/2">
           Loading...
         </h1>
       )}

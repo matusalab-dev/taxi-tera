@@ -1,5 +1,5 @@
-import { AuthProvider } from "./context/AuthContext";
-import { SavedRoutesProvider } from "./context/SavedRoutesContext";
+import AuthProvider from "./AuthContext";
+import SavedRoutesProvider from "./savedRoutesContext";
 
 const AppProviders = ({ children }) => {
   return (
