@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import connectToDB from './config/db.js';
 import apiRoutes from './routes/routes.js';
 import setupSwagger from './config/swagger.js';
@@ -9,7 +10,12 @@ connectToDB();
 
 const app = express();
 app.use(express.json());
-
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE','PATCH' ,'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, 
+}));
 app.use('/api', apiRoutes);
 app.use((err, req, res, next) => {
     console.error(err.stack);
