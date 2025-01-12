@@ -20,31 +20,9 @@ const Map = () => {
   const { coordinates } = location;
   const ZOOM_LEVEL = 13;
 
-  useEffect(() => {
-    fetch("/api/taxistands", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    }).then((response) => console.log(response.json()));
-    // Get raw response text
-    // .then((text) => {
-    //   console.log("Raw response text:", text); // Log raw response text
-    //   return JSON.parse(text); // Attempt to parse JSON
-    // })
-    // .then((data) => {
-    //   console.log("Fetched data:", data);
-    //   setTaxiStands(data);
-    // })
-    // .catch((error) => {
-    //   console.error("Error fetching data:", error);
-    // });
-  }, []);
-
   const memoizedMapContainer = useMemo(() => (
     <MapContainer
-      center={[coordinates.lat, coordinates.lng]}
+      center={[coordinates?.lat, coordinates?.lng]}
       zoom={ZOOM_LEVEL}
       ref={mapRef}
       className="absolute z-10 w-full h-full overflow-visible"
@@ -54,9 +32,10 @@ const Map = () => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {location.loaded && (
-        <Marker position={[coordinates.lat, coordinates.lng]}>
+        <Marker position={[coordinates?.lat, coordinates?.lng]}>
           <Popup>
-            Your location: <br /> lat: {coordinates.lat}, lon: {coordinates.lng}
+            Your location: <br /> lat: {coordinates?.lat}, lon:{" "}
+            {coordinates?.lng}
           </Popup>
         </Marker>
       )}
@@ -64,13 +43,13 @@ const Map = () => {
   ));
   const showMyLocation = () => {
     if (location.loaded && !location.error) {
-      mapRef.current.flyTo([coordinates.lat, coordinates.lng], ZOOM_LEVEL, {
+      mapRef.current.flyTo([coordinates?.lat, coordinates?.lng], ZOOM_LEVEL, {
         animate: true,
       });
       setCenter((prevCenter) => [
         ...prevCenter,
-        coordinates.lat,
-        coordinates.lng,
+        coordinates?.lat,
+        coordinates?.lng,
       ]);
     } else {
       alert(location.error.message);

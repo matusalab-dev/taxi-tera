@@ -1,10 +1,15 @@
 import { ChevronRightIcon, Route, Search, User } from "lucide-react";
-import { Link } from "react-router";
+import { Link, Outlet } from "react-router";
 import { useAuthsDispatch } from "../contexts/AuthContext";
+import { useTaxistandsQueries } from "../api/queries.js/taxistands-queries";
+import Footer from "./Footer";
 
 const SideBar = ({ toggle }) => {
   // const dispatch = useAuthsDispatch();
   // console.log("auth-dispatch", useAuthsDispatch());
+
+  const { data: taxistands = [] } = useTaxistandsQueries();
+  console.log("taxistands", taxistands);
 
   return (
     <section
@@ -13,37 +18,44 @@ const SideBar = ({ toggle }) => {
         !toggle && "hidden"
       }`}
     >
-      <nav>
-        <ul className="flex items-start justify-between w-full border-b-2">
-          <li>
+      <nav className="">
+        <ul className="flex items-start justify-between w-full">
+          <li className="pr-6 border-r-2">
             <Link
-              to="/"
-              className="max-w-[10ch] inline-block text-base font-normal"
+              to="/search"
+              className="text-gray-400  capitalize max-w-[10ch] flex gap-1 text-base font-normal"
             >
               <Search />
               search
             </Link>
           </li>
-          <li>
+          <li className="pr-6 border-r-2">
             <Link
-              to="/"
-              className="max-w-[10ch] inline-block text-base font-normal"
+              to="/routes"
+              className="text-gray-400 capitalize max-w-[10ch] flex gap-1 text-base font-normal"
             >
               <Route />
-              routes
+              route
             </Link>
           </li>
           <li>
             <Link
-              to="/login"
-              className="max-w-[8ch] inline-block text-base font-normal"
+              to="/"
+              className="text-gray-400 w-[13ch] items-start flex justify-end gap-1 text-sm font-light leading-tight"
             >
               <User />
-              log in to taxi tera
+              <div className="flex flex-col gap-1 text-teal-500">
+                <span className="text-sm font-normal text-gray-400">
+                  Log in to
+                </span>
+                My Taxi Tera
+              </div>
             </Link>
           </li>
         </ul>
       </nav>
+      <Outlet />
+      <Footer className="absolute bottom-0 top-full" />
     </section>
   );
 };
