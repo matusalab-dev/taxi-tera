@@ -7,6 +7,7 @@ const InputGroup = ({
   className,
   requiredField = true,
   placeholder,
+  children,
   ...inputRest
 }) => {
   return (
@@ -14,7 +15,7 @@ const InputGroup = ({
       <label htmlFor={id} className="text-base font-light capitalize ">
         {label} {requiredField && <span className="text-teal-500">*</span>}
       </label>
-      <Input type={type} id={id} placeholder={placeholder} {...inputRest} />
+      {children}
     </div>
   );
 };

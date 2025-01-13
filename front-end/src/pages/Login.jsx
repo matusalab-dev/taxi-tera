@@ -1,4 +1,5 @@
 import Button from "../components/Button";
+import Input from "../components/Input";
 import InputGroup from "../components/InputGroup";
 
 const Login = () => {
@@ -6,13 +7,17 @@ const Login = () => {
     <section className="mt-12 space-y-6">
       <h3 className="text-2xl">Log In</h3>
       <form className="space-y-3">
-        <InputGroup type="text" id="name" label="Name" placeholder="John Doe" />
-        <InputGroup
-          type="password"
-          id="password"
-          label="password"
-          placeholder="********"
-        />
+        <InputGroup label="Name">
+          <Input type="text" id="name" label="Name" placeholder="John Doe" />
+        </InputGroup>
+        <InputGroup label="password">
+          <Input
+            type="password"
+            id="password"
+            label="password"
+            placeholder="********"
+          />
+        </InputGroup>
 
         <div className="flex flex-col justify-between">
           <Button
