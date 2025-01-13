@@ -57,4 +57,47 @@ async function searchLocations(query) {
     console.error(error.message);
   }
 }
-export { getAllTaxistands, convertCoordsToAddress, searchLocations };
+
+// authentication endpoints
+async function register(query) {
+  const REGISTER_URL = `${BASE_URL}/geocode/search?api_key=${
+    import.meta.env.VITE_API_KEY
+  }&text=${query}`;
+
+  try {
+    const response = await fetch(REGISTER_URL);
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+    const json = await response.json();
+    console.log("REGISTERED:", json);
+    return json;
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+async function login(query) {
+  const LOGIN_URL = `${BASE_URL}/geocode/search?api_key=${
+    import.meta.env.VITE_API_KEY
+  }&text=${query}`;
+
+  try {
+    const response = await fetch(LOGIN_URL);
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+    const json = await response.json();
+    console.log("LOGGEDN IN:", json);
+    return json;
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+export {
+  getAllTaxistands,
+  convertCoordsToAddress,
+  searchLocations,
+  register,
+  login,
+};
