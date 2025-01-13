@@ -28,7 +28,7 @@ const Map = () => {
 
   const { data: currentLocationName = {} } = useCoordsToAddress(lat, lng);
   const { features } = currentLocationName;
-  console.log("features", features);
+  // console.log("features", features);
 
   const memoizedMapContainer = useMemo(
     () => (
@@ -43,11 +43,11 @@ const Map = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {location.loaded &&
-          features.map((feature, idx) => {
+          features?.map((feature, idx) => {
             const {
               properties: { name },
             } = feature;
-            console.log("name props", name);
+            // console.log("name props", name);
 
             if (idx == 0) {
               return (
@@ -88,10 +88,7 @@ const Map = () => {
   // console.log("coordinates", coordinates);
 
   return (
-    <div
-      // className="relative flex items-center justify-center w-full h-screen"
-      className="relative flex items-center justify-center w-full h-screen"
-    >
+    <div className="relative flex items-center justify-center w-full h-screen">
       {location.loaded && !location.error ? (
         <>
           {memoizedMapContainer}

@@ -1,15 +1,21 @@
 import SearchInput from "../components/SearchInput";
-import { useState } from "react";
 import SearchAutocomplete from "../components/SearchAutocomplete";
 import Button from "../components/Button";
-
+import { useState } from "react";
+import { useSearchLocation } from "../api/queries.js/locaction-queries";
 const SearchStands = () => {
-  const [searchStands, setSearchStands] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const { data: address = {} } = useSearchLocation(searchQuery);
+  const { features } = address;
+  console.log("address", address);
   return (
-    <div className="mt-6 space-y-6">
-      <SearchInput />
-      <SearchAutocomplete />
-      <div className="flex items-start gap-2">
+    <div className="mt-6">
+      <SearchInput
+        searchQuery={searchQuery}
+        setSearchQuery={(e) => setSearchQuery(e.target.value)}
+      />
+      {searchQuery && <SearchAutocomplete address={features} />}
+      <div className="flex items-start gap-2 mt-6">
         <Button
           as="Link"
           to="/login"
