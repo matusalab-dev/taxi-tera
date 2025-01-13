@@ -9,61 +9,83 @@ import {
 import "leaflet/dist/leaflet.css";
 import "../App.css";
 import useGeolocation from "../hooks/useGeolocation";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import { LocateIcon } from "lucide-react";
-import { useMemo } from "react";
+import * as L from "leaflet";
+import { useTaxistandsQueries } from "../api/queries.js/taxistands-queries";
+import { useCoordsToAddress } from "../api/queries.js/locaction-queries";
 const Map = () => {
   const location = useGeolocation();
-  const [center, setCenter] = useState([9.0204692, 38.8024029]); // default location set to Megenagna
+  const {
+    coordinates: { lat, lng },
+  } = location;
+  const [center, setCenter] = useState([]); //9.0204692, 38.8024029 default location set to Megenagna
   const mapRef = useRef();
 
-  const { coordinates } = location;
   const ZOOM_LEVEL = 13;
+  const { data = {} } = useTaxistandsQueries();
+  const { data: taxiStands = [] } = data;
 
-  const memoizedMapContainer = useMemo(() => (
-    <MapContainer
-      center={[coordinates?.lat, coordinates?.lng]}
-      zoom={ZOOM_LEVEL}
-      ref={mapRef}
-      className="absolute z-10 w-full h-full overflow-visible"
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      {location.loaded && (
-        <Marker position={[coordinates?.lat, coordinates?.lng]}>
-          <Popup>
-            Your location: <br /> lat: {coordinates?.lat}, lon:{" "}
-            {coordinates?.lng}
-          </Popup>
-        </Marker>
-      )}
-    </MapContainer>
-  ));
+  const { data: currentLocationName = {} } = useCoordsToAddress(lat, lng);
+  const { features } = currentLocationName;
+  console.log("features", features);
+
+  const memoizedMapContainer = useMemo(
+    () => (
+      <MapContainer
+        center={[lat, lng]}
+        zoom={ZOOM_LEVEL}
+        ref={mapRef}
+        className="absolute z-10 w-full h-full overflow-visible"
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        {location.loaded &&
+          features.map((feature, idx) => {
+            const {
+              properties: { name },
+            } = feature;
+            console.log("name props", name);
+
+            if (idx == 0) {
+              return (
+                <Marker key={idx} position={[lat, lng]}>
+                  <Popup>{name}</Popup>
+                </Marker>
+              );
+            }
+          })}
+        {taxiStands.map((stand, idx) => {
+          const { location, name, rating } = stand;
+          const [lng, lat] = location.coordinates; // Ensure correct order of coordinates
+
+          return (
+            <Marker key={idx} position={[lat, lng]}>
+              <Popup>{name}</Popup>
+            </Marker>
+          );
+        })}
+      </MapContainer>
+    ),
+    [taxiStands]
+  );
   const showMyLocation = () => {
     if (location.loaded && !location.error) {
-      mapRef.current.flyTo([coordinates?.lat, coordinates?.lng], ZOOM_LEVEL, {
+      mapRef.current.flyTo([lat, lng], ZOOM_LEVEL, {
         animate: true,
       });
-      setCenter((prevCenter) => [
-        ...prevCenter,
-        coordinates?.lat,
-        coordinates?.lng,
-      ]);
+      setCenter((prevCenter) => [...prevCenter, lat, lng]);
     } else {
       alert(location.error.message);
     }
   };
 
   useEffect(() => {
-    setCenter((prevCenter) => [
-      ...prevCenter,
-      coordinates.lat,
-      coordinates.lng,
-    ]);
+    setCenter((prevCenter) => [...prevCenter, lat, lng]);
   }, []);
-  console.log("coordinates", coordinates);
+  // console.log("coordinates", coordinates);
 
   return (
     <div
@@ -73,6 +95,7 @@ const Map = () => {
       {location.loaded && !location.error ? (
         <>
           {memoizedMapContainer}
+
           <button
             onClick={showMyLocation}
             className="absolute z-[1000] px-3 py-1  top-24 left-0"

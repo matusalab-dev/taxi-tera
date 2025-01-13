@@ -8,9 +8,6 @@ const SideBar = ({ toggle }) => {
   // const dispatch = useAuthsDispatch();
   // console.log("auth-dispatch", useAuthsDispatch());
 
-  const { data: taxistands = [] } = useTaxistandsQueries();
-  console.log("taxistands", taxistands);
-
   return (
     <section
       id="sidebar"
