@@ -59,38 +59,52 @@ async function searchLocations(query) {
 }
 
 // authentication endpoints
-async function register(query) {
-  const REGISTER_URL = `${BASE_URL}/geocode/search?api_key=${
-    import.meta.env.VITE_API_KEY
-  }&text=${query}`;
+async function registerUser(newUser) {
+  const REGISTER_URL = `${BASE_URL}/auth/signup`;
 
   try {
-    const response = await fetch(REGISTER_URL);
+    const response = await fetch(REGISTER_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newUser),
+    });
+
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
     const json = await response.json();
-    console.log("REGISTERED:", json);
+    console.log("REGISTERED successfully:", json);
     return json;
   } catch (error) {
+    console.log("server error:");
+
     console.error(error.message);
   }
 }
 
-async function login(query) {
-  const LOGIN_URL = `${BASE_URL}/geocode/search?api_key=${
-    import.meta.env.VITE_API_KEY
-  }&text=${query}`;
+async function loginUser(user) {
+  const LOGIN_URL = `${BASE_URL}/auth/login`;
 
   try {
-    const response = await fetch(LOGIN_URL);
+    const response = await fetch(LOGIN_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    });
+
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
     const json = await response.json();
-    console.log("LOGGEDN IN:", json);
+    console.log("logged successfully:", json);
     return json;
   } catch (error) {
+    console.log("server error:");
+
     console.error(error.message);
   }
 }
@@ -98,6 +112,6 @@ export {
   getAllTaxistands,
   convertCoordsToAddress,
   searchLocations,
-  register,
-  login,
+  registerUser,
+  loginUser,
 };

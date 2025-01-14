@@ -2,6 +2,7 @@ import { useState } from "react";
 import Input from "../components/Input";
 import InputGroup from "../components/InputGroup";
 import { Rotate3D } from "lucide-react";
+import Button from "../components/Button";
 
 const TaxiRoute = () => {
   const [route, setRoute] = useState({
@@ -37,6 +38,13 @@ const TaxiRoute = () => {
             onChange={(e) => setRoute({ ...route, end: e.target.value })}
           />
         </InputGroup>
+        <Button
+          type="submit"
+          as="button"
+          color="teal"
+          size="lg"
+          children="Find My Way"
+        />
       </form>
     </section>
   );

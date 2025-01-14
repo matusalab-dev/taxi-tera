@@ -7,7 +7,7 @@ const SearchStands = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { data: address = {} } = useSearchLocation(searchQuery);
   const { features } = address;
-  console.log("address", address);
+  // console.log("address", address);
   return (
     <div className="mt-6">
       <SearchInput

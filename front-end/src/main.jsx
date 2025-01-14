@@ -21,6 +21,7 @@ import NotFound from "./pages/NotFound.jsx";
 import PrivateRoute from "./components/PrivateRoutes.jsx";
 import SavedRoutes from "./pages/SavedRoutes.jsx";
 import SearchStands from "./pages/SearchStands.jsx";
+import StandsPage from "./pages/StandsPage.jsx";
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter(
@@ -28,6 +29,8 @@ const router = createBrowserRouter(
     <Route path="/" element={<App />}>
       <Route index path="/" element={<Home />} />
       <Route path="/search" element={<SearchStands />} />
+      <Route path="/search/:id" element={<StandsPage />} />
+
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/routes" element={<TaxiRoute />} />

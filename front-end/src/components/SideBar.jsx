@@ -1,4 +1,10 @@
-import { ChevronRightIcon, Route, Search, User } from "lucide-react";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  Route,
+  Search,
+  User,
+} from "lucide-react";
 import { Link, Outlet } from "react-router";
 import { useAuthsDispatch } from "../contexts/AuthContext";
 import { useTaxistandsQueries } from "../api/queries.js/taxistands-queries";
@@ -11,7 +17,7 @@ const SideBar = ({ toggle }) => {
   return (
     <section
       id="sidebar"
-      className={`block rounded-tr-lg transition-all duration-150 rounded-tl-lg sm:rounded-none sm:w-[30%] sm:min-w-96 w-full sm:h-full p-5 h-96 bg-white text-black overflow-y-visible z-[1000] fixed top-2/4 sm:top-0 right-0 ${
+      className={`block sm:overflow-y-scroll overflow-hidden rounded-tr-lg transition-all duration-150 rounded-tl-lg sm:rounded-none sm:w-[30%] sm:min-w-96 w-full sm:h-full p-5 h-96 bg-white text-black overflow-y-visible z-[1000] fixed top-2/4 sm:top-0 right-0 ${
         !toggle && "hidden"
       }`}
     >
@@ -51,6 +57,18 @@ const SideBar = ({ toggle }) => {
           </li>
         </ul>
       </nav>
+      {/* <button
+        onClick={() => handleToggle()}
+        className={`z-[1000] fixed top-2/4 sm:top-1/2 right-0 bg-white ${
+          !toggle && "right-[30%]"
+        }`}
+      >
+        {toggle ? (
+          <ChevronRightIcon size={40} />
+        ) : (
+          <ChevronLeftIcon size={40} className="animate-pulse" />
+        )}
+      </button> */}
       <Outlet />
       <Footer className="absolute bottom-0 top-full" />
     </section>
