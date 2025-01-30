@@ -7,7 +7,6 @@ import {
 } from "lucide-react";
 import { Link, Outlet } from "react-router";
 import { useAuthsDispatch } from "../contexts/AuthContext";
-import { useTaxistandsQueries } from "../api/queries.js/taxistands-queries";
 import Footer from "./Footer";
 
 const SideBar = ({ toggle }) => {
@@ -17,7 +16,7 @@ const SideBar = ({ toggle }) => {
   return (
     <section
       id="sidebar"
-      className={`block sm:overflow-y-scroll overflow-hidden rounded-tr-lg transition-all duration-150 rounded-tl-lg sm:rounded-none sm:w-[30%] sm:min-w-96 w-full sm:h-full p-5 h-96 bg-white text-black overflow-y-visible z-[1000] fixed top-2/4 sm:top-0 right-0 ${
+      className={`block sm:overflow-y-scroll overflow-hidden rounded-tr-lg transition-all duration-150 rounded-tl-lg sm:rounded-none sm:w-[30%] sm:min-w-96 w-full sm:h-full p-5 pb-12 h-12 bg-white text-black overflow-y-visible z-[1000] fixed top-2/4 sm:top-0 right-0 ${
         !toggle && "hidden"
       }`}
     >

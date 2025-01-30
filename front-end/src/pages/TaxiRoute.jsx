@@ -3,39 +3,50 @@ import Input from "../components/Input";
 import InputGroup from "../components/InputGroup";
 import { Rotate3D } from "lucide-react";
 import Button from "../components/Button";
+import { useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { findRoute } from "../api/api";
+import { useFindRoutes } from "../api/queries/location-queries";
 
 const TaxiRoute = () => {
-  const [route, setRoute] = useState({
-    start: "",
-    end: "",
-  });
-  // const [end, setEnd] = useState("");
-  function handleSubmit({ e }) {
-    e.preventDefault();
-    console.log("val:", e.target.value);
-  }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const mutation = useFindRoutes();
+  const onSubmit = (data) => {
+    const startCoordinates = data.start.split(",").map(Number);
+    const endCoordinates = data.end.split(",").map(Number);
+
+    console.log("Route data:", startCoordinates, endCoordinates);
+    mutation.mutate({ startCoordinates, endCoordinates });
+  };
+
   return (
     <section>
-      <form className="flex flex-col gap-4 mt-10" onSubmit={handleSubmit}>
+      <form
+        className="flex flex-col gap-4 mt-10"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <InputGroup label="Start">
           <Input
             type="text"
             id="start"
-            requiredField={false}
             name="start"
             placeholder="Start"
-            value={route.start}
-            onChange={(e) => setRoute({ ...route, start: e.target.value })}
+            {...register("start", { required: "start location is required" })}
           />
         </InputGroup>
         <InputGroup label="End">
           <Input
             type="text"
             name="end"
-            requiredField={false}
             placeholder="Destination"
-            value={route.end}
-            onChange={(e) => setRoute({ ...route, end: e.target.value })}
+            {...register("end", {
+              required: "Destination location is required",
+            })}
           />
         </InputGroup>
         <Button

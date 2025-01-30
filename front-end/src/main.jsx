@@ -22,6 +22,7 @@ import PrivateRoute from "./components/PrivateRoutes.jsx";
 import SavedRoutes from "./pages/SavedRoutes.jsx";
 import SearchStands from "./pages/SearchStands.jsx";
 import StandsPage from "./pages/StandsPage.jsx";
+import Dashboard from "./pages/Admin/Dashboard.jsx";
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter(
@@ -39,6 +40,10 @@ const router = createBrowserRouter(
       <Route path="" element={<PrivateRoute />}>
         <Route path="/saved-routes" element={<SavedRoutes />} />
       </Route>
+      {/* Admin users */}
+
+      <Route path="/dashboard" element={<Dashboard />} />
+
       {/* if the route doesn't match to the above routes,
         redirect user to the not-found(404) page */}
       <Route path="*" element={<NotFound />} />

@@ -1,5 +1,5 @@
 import { useParams } from "react-router";
-import { useSearchLocation } from "../api/queries.js/locaction-queries";
+// import { useSearchLocation } from "../api/queries/location-queries";
 
 const StandsPage = () => {
   const { id: routeId } = useParams();

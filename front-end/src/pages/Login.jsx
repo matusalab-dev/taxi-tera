@@ -7,23 +7,22 @@ import { useNavigate } from "react-router";
 import { loginUser } from "../api/api";
 
 const Login = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { isSubmitting, isLoading, errors },
   } = useForm();
 
   // Access the client
   const queryClient = useQueryClient();
 
-  const navigate = useNavigate();
-  // const mutate = useRegisterMutation();
   const mutation = useMutation({
     mutationFn: loginUser,
     onSuccess: () => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["user"] });
-      navigate("/login");
+      navigate("/dashboard");
     },
     onError: (error) => {
       console.error("Error registering user:", error);
@@ -64,7 +63,8 @@ const Login = () => {
             children="Log in"
             color="teal"
             size="lg"
-            className="!mt-4"
+            disabled={isSubmitting}
+            className={`!mt-4 ${isSubmitting && "!animate-pulse"}`}
           />
           <div className="flex items-center gap-2 !mt-5 font-normal">
             <p className="font-light">new user?</p>

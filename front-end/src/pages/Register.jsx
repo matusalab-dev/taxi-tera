@@ -14,7 +14,7 @@ const Register = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting, isLoading },
   } = useForm();
 
   // Access the client
@@ -95,7 +95,8 @@ const Register = () => {
             children="Register"
             color="teal"
             size="lg"
-            className=""
+            disabled={isSubmitting}
+            className={`${isSubmitting && "!animate-pulse !bg-red-800"}`}
           />
         </div>
       </form>

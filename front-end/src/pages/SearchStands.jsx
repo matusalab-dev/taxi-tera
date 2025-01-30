@@ -2,7 +2,7 @@ import SearchInput from "../components/SearchInput";
 import SearchAutocomplete from "../components/SearchAutocomplete";
 import Button from "../components/Button";
 import { useState } from "react";
-import { useSearchLocation } from "../api/queries.js/locaction-queries";
+import { useSearchLocation } from "../api/queries/location-queries";
 const SearchStands = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { data: address = {} } = useSearchLocation(searchQuery);

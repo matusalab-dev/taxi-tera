@@ -58,6 +58,30 @@ async function searchLocations(query) {
   }
 }
 
+// finding route based on user start and destination input
+async function findRoute(routeObject) {
+  const { startCoordinates, endCoordinates } = routeObject;
+  const [latStart, lngStart] = startCoordinates;
+  const [latDestination, lngDestination] = endCoordinates;
+  console.log(start);
+
+  const ORS_COORDS_ADDRESS_URL = `${ORS_URL}/v2/directions/driving-car?api_key=${
+    import.meta.env.VITE_API_KEY
+  }&start=${latStart},${lngStart}&end=${latDestination},${lngDestination}`;
+
+  try {
+    const response = await fetch(ORS_COORDS_ADDRESS_URL);
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+    const json = await response.json();
+    console.log("founded routes:", json);
+    return json;
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
 // authentication endpoints
 async function registerUser(newUser) {
   const REGISTER_URL = `${BASE_URL}/auth/signup`;
@@ -104,14 +128,15 @@ async function loginUser(user) {
     return json;
   } catch (error) {
     console.log("server error:");
-
     console.error(error.message);
+    return error.message;
   }
 }
 export {
   getAllTaxistands,
   convertCoordsToAddress,
   searchLocations,
+  findRoute,
   registerUser,
   loginUser,
 };
